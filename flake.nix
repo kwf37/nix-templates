@@ -28,13 +28,32 @@
         in
           output.devShells.${system}.default;
     in {
-      devShells = forAllSystems ( { pkgs }:
+      devShells = forAllSystems ({ pkgs }:
         let nixShell = devShellFromTemplate { templateName = "nix"; system = pkgs.system; }; in
         {
           nix = nixShell;
           frontend = devShellFromTemplate { templateName = "frontend"; system = pkgs.system; };
           coq = devShellFromTemplate { templateName = "coq"; system = pkgs.system; };
           default = nixShell;
+        }
+      );
+
+      templates = forAllSystems ({ pkgs }:
+        {
+          nix = {
+            path = ./templates/nix;
+            description = "Nix dev environment template";
+          };
+
+          frontend = {
+            path = ./templates/frontend;
+            description = "Frontend dev environment template";
+          };
+        
+          coq = {
+            path = ./templates/coq;
+            description = "Coq dev environment template";
+          };
         }
       );
     };
