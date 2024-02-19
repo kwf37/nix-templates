@@ -38,7 +38,7 @@
         }
       );
 
-      templates = forAllSystems ({ pkgs }:
+      templates = 
         {
           nix = {
             path = ./templates/nix;
@@ -54,7 +54,6 @@
             path = ./templates/coq;
             description = "Coq dev environment template";
           };
-        }
-      );
+        };
     };
 }
