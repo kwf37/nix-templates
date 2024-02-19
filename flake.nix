@@ -20,13 +20,20 @@
           config.allowUnfree = true;
         };
       });
+
+      devShellFromTemplate = { templateName, system }: 
+        let 
+          flake = import ./templates/${templateName}/flake.nix;
+          output = flake.outputs { self = self; nixpkgs = nixpkgs; };
+        in
+          output.devShells.${system}.default;
     in {
       devShells = forAllSystems ( { pkgs }:
-        let nixShell = import ./devShells/nix.nix { inherit pkgs; }; in
+        let nixShell = devShellFromTemplate { templateName = "nix"; system = pkgs.system; }; in
         {
           nix = nixShell;
-          frontend = import ./devShells/frontend.nix { inherit pkgs; };
-          coq = import ./devShells/coq.nix { inherit pkgs; };
+          frontend = devShellFromTemplate { templateName = "frontend"; system = pkgs.system; };
+          coq = devShellFromTemplate { templateName = "coq"; system = pkgs.system; };
           default = nixShell;
         }
       );
