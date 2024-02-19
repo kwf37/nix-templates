@@ -25,6 +25,7 @@
         let nixShell = import ./devShells/nix.nix { inherit pkgs; }; in
         {
           nix = nixShell;
+          coq = import ./devShells/coq.nix { inherit pkgs; };
           default = nixShell;
         }
       );
